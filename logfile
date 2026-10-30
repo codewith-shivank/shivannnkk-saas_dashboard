@@ -1,0 +1,11 @@
+2026-10-28 23:05:20.942 IST [17348] LOG:  starting PostgreSQL 16.15 on x86_64-windows, compiled by msvc-19.51.36260, 64-bit
+2026-10-28 23:05:20.955 IST [17348] LOG:  listening on IPv6 address "::1", port 5432
+2026-10-28 23:05:20.955 IST [17348] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-10-28 23:05:21.029 IST [14656] LOG:  database system was shut down at 2026-10-28 23:05:19 IST
+2026-10-28 23:05:21.070 IST [17348] LOG:  database system is ready to accept connections
+2026-10-28 23:06:38.504 IST [25276] FATAL:  database "Shivannnkk" does not exist
+2026-10-28 23:06:38.622 IST [12444] FATAL:  role "postgres" does not exist
+2026-10-28 23:07:53.661 IST [1588] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2026-10-28 23:10:21.013 IST [6648] LOG:  checkpoint starting: time
+2026-10-28 23:12:14.122 IST [6648] LOG:  checkpoint complete: wrote 1045 buffers (6.4%); 0 WAL file(s) added, 0 removed, 0 recycled; write=112.791 s, sync=0.298 s, total=113.109 s; sync files=334, longest=0.002 s, average=0.001 s; distance=4965 kB, estimate=4965 kB; lsn=0/1A5FA68, redo lsn=0/1A5FA30
