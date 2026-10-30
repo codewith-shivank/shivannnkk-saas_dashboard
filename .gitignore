@@ -18,3 +18,8 @@ build/
 
 # local postgres data
 tools/pg/
+
+# Windows reserved file
+nul
+# Local agent/workflow state.agent/.agents/.gemini/.gsd/
+
