@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+
+.font-display { font-family: 'Manrope', sans-serif; }
+.nav-link { @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-500 transition hover:bg-slate-50 hover:text-[#14202b]; }
+.nav-link-active { @apply bg-[#fff1ed] font-bold text-[#e05f45]; }
+.avatar { @apply grid h-9 w-9 shrink-0 place-items-center rounded-full text-[11px] font-bold; }
+.avatar-coral { @apply bg-[#fbe1d8] text-[#a65d4b]; }
+.avatar-blue { @apply bg-[#dce7fb] text-[#5573ae]; }
+.avatar-violet { @apply bg-[#e9e1f7] text-[#76619d]; }
+.avatar-green { @apply bg-[#dcefe7] text-[#4a896e]; }
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'DM Sans', sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}

@@ -1,0 +1,163 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  password      String
+  role          String         @default("USER")
+  status        String         @default("ACTIVE")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  activities    Activity[]
+  notifications Notification[]
+  dashboards    Dashboard[]
+  memberships   Membership[]
+  subscriptions Subscription[]
+}
+
+model Workspace {
+  id            String         @id @default(uuid())
+  name          String
+  slug          String         @unique
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  memberships   Membership[]
+  activities    Activity[]
+  notifications Notification[]
+  dashboards    Dashboard[]
+  subscriptions Subscription[]
+  customers     Customer[]
+  invoices      Invoice[]
+}
+
+model Membership {
+  id          String    @id @default(uuid())
+  userId      String
+  workspaceId String
+  role        String    @default("MEMBER")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@unique([userId, workspaceId])
+  @@index([workspaceId, role])
+}
+
+model Plan {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  description   String
+  monthlyPrice  Int
+  currency      String         @default("INR")
+  active        Boolean        @default(true)
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id                     String    @id @default(uuid())
+  workspaceId            String
+  userId                 String
+  planId                 String
+  status                 String    @default("ACTIVE")
+  razorpaySubscriptionId String?   @unique
+  currentPeriodStart     DateTime
+  currentPeriodEnd       DateTime
+  cancelAtPeriodEnd      Boolean   @default(false)
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  workspace              Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                   Plan      @relation(fields: [planId], references: [id])
+  invoices               Invoice[]
+
+  @@index([workspaceId, status])
+}
+
+model Customer {
+  id          String    @id @default(uuid())
+  workspaceId String
+  name        String
+  email       String
+  status      String    @default("ACTIVE")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, email])
+  @@index([workspaceId, status])
+}
+
+model Invoice {
+  id             String        @id @default(uuid())
+  workspaceId    String
+  subscriptionId String?
+  amount         Int
+  currency       String        @default("INR")
+  status         String        @default("PAID")
+  paidAt         DateTime?
+  createdAt      DateTime      @default(now())
+  workspace      Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId, createdAt])
+}
+
+model Activity {
+  id          String     @id @default(uuid())
+  userId      String
+  workspaceId String?
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  action      String
+  entity      String
+  detail      String?
+  createdAt   DateTime   @default(now())
+
+  @@index([workspaceId, createdAt])
+}
+
+model Notification {
+  id          String     @id @default(uuid())
+  userId      String
+  workspaceId String?
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  title       String
+  message     String
+  read        Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+
+  @@index([workspaceId, read])
+}
+
+model Metric {
+  id      String   @id @default(uuid())
+  date    DateTime @unique
+  revenue Float
+  users   Int
+  orders  Int
+  visits  Int
+}
+
+model Dashboard {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  userId      String
+  workspaceId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([workspaceId])
+}
